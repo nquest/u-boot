@@ -185,6 +185,7 @@ dtb-$(CONFIG_ARCH_MESON) += \
 	meson-gxl-s905x-libretech-cc.dtb \
 	meson-gxl-s905x-libretech-cc-v2.dtb \
 	meson-gxl-s905x-p212.dtb \
+	meson-gxl-s905x-vermax-uhd300x.dts \
 	meson-gxm-khadas-vim2.dtb \
 	meson-gxm-s912-libretech-pc.dtb \
 	meson-gxm-wetek-core2.dtb \
@@ -674,6 +675,7 @@ dtb-$(CONFIG_MACH_SUN50I_H616) += \
 	sun50i-h616-orangepi-zero2.dtb
 dtb-$(CONFIG_MACH_SUN50I) += \
 	sun50i-a64-amarula-relic.dtb \
+	sun50i-a64-atol-strike.dtb \
 	sun50i-a64-bananapi-m64.dtb \
 	sun50i-a64-nanopi-a64.dtb \
 	sun50i-a64-oceanic-5205-5inmfd.dtb \

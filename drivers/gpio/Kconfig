@@ -329,6 +329,12 @@ config SUNXI_GPIO
 	help
 	  Support the GPIO device in Allwinner SoCs.
 
+config SUNXI_GPIO_V2
+	bool "Allwinner GPIO driver V2 (on T113)"
+	depends on ARCH_SUNXI
+	help
+	  Support the GPIO device v2 in newer Allwinner SoCs.
+
 config XILINX_GPIO
 	bool "Xilinx GPIO driver"
 	depends on DM_GPIO

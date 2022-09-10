@@ -113,6 +113,7 @@ static bool sunxi_mmc_can_calibrate(void)
 	return IS_ENABLED(CONFIG_MACH_SUN50I) ||
 	       IS_ENABLED(CONFIG_MACH_SUN50I_H5) ||
 	       IS_ENABLED(CONFIG_SUN50I_GEN_H6) ||
+	       IS_ENABLED(CONFIG_MACH_SUN8I_T113) ||
 	       IS_ENABLED(CONFIG_MACH_SUN8I_R40);
 }
 
@@ -572,7 +573,7 @@ struct mmc *sunxi_mmc_init(int sdc_no)
 
 	/* config ahb clock */
 	debug("init mmc %d clock and io\n", sdc_no);
-#if !defined(CONFIG_SUN50I_GEN_H6)
+#if !defined(CONFIG_SUN50I_GEN_H6) && !defined(CONFIG_MACH_SUN8I_T113)
 	setbits_le32(&ccm->ahb_gate0, 1 << AHB_GATE_OFFSET_MMC(sdc_no));
 
 #ifdef CONFIG_SUNXI_GEN_SUN6I
@@ -726,6 +727,7 @@ static const struct udevice_id sunxi_mmc_ids[] = {
 	{ .compatible = "allwinner,sun5i-a13-mmc" },
 	{ .compatible = "allwinner,sun7i-a20-mmc" },
 	{ .compatible = "allwinner,sun8i-a83t-emmc" },
+	{ .compatible = "allwinner,sun8i-t113-mmc"},
 	{ .compatible = "allwinner,sun9i-a80-mmc" },
 	{ .compatible = "allwinner,sun50i-a64-mmc" },
 	{ .compatible = "allwinner,sun50i-a64-emmc" },

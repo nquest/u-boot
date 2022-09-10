@@ -52,6 +52,29 @@
 #define SUNXI_GPIO_M	12
 #define SUNXI_GPIO_N	13
 
+#ifdef CONFIG_SUNXI_GPIO_V2
+struct sunxi_gpio {
+        u32 cfg[4];
+        u32 dat;
+        u32 drv[4];
+        u32 pull[2];
+        u32 res;
+};
+
+/* gpio interrupt control */
+struct sunxi_gpio_int {
+        u32 cfg[3];
+        u32 ctl;
+        u32 sta;
+        u32 deb;                /* interrupt debounce */
+};
+
+struct sunxi_gpio_reg {
+        struct sunxi_gpio gpio_bank[SUNXI_GPIO_BANKS];
+        u8 res[0x50];/*pad to 0x200*/
+        struct sunxi_gpio_int gpio_int;
+};
+#else
 struct sunxi_gpio {
 	u32 cfg[4];
 	u32 dat;
@@ -72,6 +95,7 @@ struct sunxi_gpio_reg {
 	u8 res[0xbc];
 	struct sunxi_gpio_int gpio_int;
 };
+#endif
 
 #define SUN50I_H6_GPIO_POW_MOD_SEL	0x340
 #define SUN50I_H6_GPIO_POW_MOD_VAL	0x348
@@ -80,6 +104,19 @@ struct sunxi_gpio_reg {
 	&((struct sunxi_gpio_reg *)SUNXI_PIO_BASE)->gpio_bank[bank] : \
 	&((struct sunxi_gpio_reg *)SUNXI_R_PIO_BASE)->gpio_bank[(bank) - SUNXI_GPIO_L])
 
+#ifdef SUNXI_GPIO_V2
+#define GPIO_BANK(pin)          ((pin) >> 5)
+#define GPIO_NUM(pin)           ((pin) & 0x1f)
+
+#define GPIO_CFG_INDEX(pin)     (((pin) & 0x1f) >> 3)
+#define GPIO_CFG_OFFSET(pin)    ((((pin) & 0x1f) & 0x7) << 2)
+
+#define GPIO_DRV_INDEX(pin)     (((pin) & 0x1f) >> 3)
+#define GPIO_DRV_OFFSET(pin)    ((((pin) & 0x1f) & 0x7) << 2)
+
+#define GPIO_PULL_INDEX(pin)    (((pin) & 0x1f) >> 4)
+#define GPIO_PULL_OFFSET(pin)   ((((pin) & 0x1f) & 0xf) << 1)
+#else
 #define GPIO_BANK(pin)		((pin) >> 5)
 #define GPIO_NUM(pin)		((pin) & 0x1f)
 
@@ -91,7 +128,7 @@ struct sunxi_gpio_reg {
 
 #define GPIO_PULL_INDEX(pin)	(((pin) & 0x1f) >> 4)
 #define GPIO_PULL_OFFSET(pin)	((((pin) & 0x1f) & 0xf) << 1)
-
+#endif
 /* GPIO bank sizes */
 #define SUNXI_GPIOS_PER_BANK	32
 
@@ -130,6 +167,7 @@ enum sunxi_gpio_number {
 
 #define SUNXI_GPAXP0(_nr)	(SUNXI_GPIO_AXP0_START + (_nr))
 
+
 /* GPIO pin function config */
 #define SUNXI_GPIO_INPUT	0
 #define SUNXI_GPIO_OUTPUT	1
@@ -152,6 +190,7 @@ enum sunxi_gpio_number {
 #define SUN8I_GPB_UART2		2
 #define SUN8I_A33_GPB_UART0	3
 #define SUN8I_A83T_GPB_UART0	2
+#define SUN8I_T113_GPE_UART0	6
 #define SUN8I_V3S_GPB_UART0	3
 #define SUN50I_GPB_UART0	4
 
@@ -161,6 +200,7 @@ enum sunxi_gpio_number {
 #define SUN6I_GPC_SDC3		4
 #define SUN50I_GPC_SPI0		4
 #define SUNIV_GPC_SPI0		2
+#define SUN8I_T113_GPC_SPI0 2
 
 #define SUNXI_GPD_LCD0		2
 #define SUNXI_GPD_LVDS0		3

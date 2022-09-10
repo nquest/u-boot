@@ -149,6 +149,8 @@
 #ifdef CONFIG_MACH_SUN50I_H616
 #define CONFIG_SPL_MAX_SIZE		0xbfa0		/* 48 KiB */
 #define LOW_LEVEL_SRAM_STACK		0x58000
+#elif CONFIG_MACH_SUN8I_T113
+#define LOW_LEVEL_SRAM_STACK		0x00048000
 #else
 #define CONFIG_SPL_MAX_SIZE		0x7fa0		/* 32 KiB */
 /* end of SRAM A2 on H6 for now */
@@ -199,6 +201,15 @@
  * 16M uncompressed kernel, 8M compressed kernel, 1M fdt,
  * 1M script, 1M pxe, 1M dt overlay and the ramdisk at the end.
  */
+#define BOOTM_SIZE        __stringify(0x2e00000)
+#define KERNEL_ADDR_R     __stringify(SDRAM_OFFSET(1000000))
+#define FDT_ADDR_R        __stringify(SDRAM_OFFSET(1800000))
+#define SCRIPT_ADDR_R     __stringify(SDRAM_OFFSET(1900000))
+#define PXEFILE_ADDR_R    __stringify(SDRAM_OFFSET(1A00000))
+#define FDTOVERLAY_ADDR_R __stringify(SDRAM_OFFSET(1B00000))
+#define RAMDISK_ADDR_R    __stringify(SDRAM_OFFSET(1C00000))
+
+#elif defined(CONFIG_MACH_SUN8I_T113)
 #define BOOTM_SIZE        __stringify(0x2e00000)
 #define KERNEL_ADDR_R     __stringify(SDRAM_OFFSET(1000000))
 #define FDT_ADDR_R        __stringify(SDRAM_OFFSET(1800000))

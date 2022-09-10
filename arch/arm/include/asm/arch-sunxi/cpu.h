@@ -6,8 +6,12 @@
 #ifndef _SUNXI_CPU_H
 #define _SUNXI_CPU_H
 
+
+
 #if defined(CONFIG_MACH_SUN9I)
 #include <asm/arch/cpu_sun9i.h>
+#elif defined(CONFIG_MACH_SUN8I_T113)
+#include <asm/arch/cpu_sun8i_t113.h>
 #elif defined(CONFIG_SUN50I_GEN_H6)
 #include <asm/arch/cpu_sun50i_h6.h>
 #else
@@ -19,5 +23,6 @@
 #define SOCID_V3S	0x1681
 #define SOCID_H5	0x1718
 #define SOCID_R40	0x1701
+#define SOCID_T113	0x1859
 
 #endif /* _SUNXI_CPU_H */

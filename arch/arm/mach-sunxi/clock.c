@@ -36,7 +36,7 @@ int clock_init(void)
 
 /* These functions are shared between various SoCs so put them here. */
 #if defined CONFIG_SUNXI_GEN_SUN6I && !defined CONFIG_MACH_SUN9I && \
-	!defined CONFIG_MACH_SUNIV
+	!defined CONFIG_MACH_SUNIV && !defined(CONFIG_CLK_SUN8I_T113)
 int clock_twi_onoff(int port, int state)
 {
 	struct sunxi_ccm_reg *const ccm =

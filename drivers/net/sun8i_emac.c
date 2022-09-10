@@ -9,6 +9,8 @@
  * LABBE Corentin & Chen-Yu Tsai for Linux, THANKS!
  *
 */
+#define DEBUG
+#define LOG_DEBUG
 
 #include <cpu_func.h>
 #include <log.h>
@@ -566,6 +568,8 @@ static int parse_phy_pins(struct udevice *dev)
 	else if (IS_ENABLED(CONFIG_MACH_SUN8I_A83T))
 		iomux = SUN8I_IOMUX;
 	else if (IS_ENABLED(CONFIG_MACH_SUN50I))
+		iomux = SUN8I_IOMUX;
+	else if (IS_ENABLED(CONFIG_MACH_SUN8I_T113))
 		iomux = SUN8I_IOMUX;
 	else
 		BUILD_BUG_ON_MSG(1, "missing pinmux value for Ethernet pins");

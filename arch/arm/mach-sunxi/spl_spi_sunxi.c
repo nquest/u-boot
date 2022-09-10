@@ -78,8 +78,11 @@
 
 #define CCM_AHB_GATING0             (0x01C20000 + 0x60)
 #define CCM_H6_SPI_BGR_REG          (0x03001000 + 0x96c)
+#define CCM_T113_SPI_BGR_REG		(0x02001000 + 0x96c)
 #ifdef CONFIG_MACH_SUN50I_H6
 #define CCM_SPI0_CLK                (0x03001000 + 0x940)
+#elif CONFIG_MACH_SUN8I_T113
+#define CCM_SPI0_CLK                (0x02001000 + 0x940)
 #else
 #define CCM_SPI0_CLK                (0x01C20000 + 0xA0)
 #endif
@@ -117,6 +120,14 @@ static void spi0_pinmux_setup(unsigned int pin_function)
 		sunxi_gpio_set_cfgpin(SUNXI_GPC(23), pin_function);
 	else
 		sunxi_gpio_set_cfgpin(SUNXI_GPC(3), pin_function);
+
+	if (IS_ENABLED(CONFIG_MACH_SUN8I_T113)) {
+		sunxi_gpio_set_cfgpin(SUNXI_GPC(4), pin_function);
+		sunxi_gpio_set_cfgpin(SUNXI_GPC(5), pin_function);
+		sunxi_gpio_set_cfgpin(SUNXI_GPC(6), pin_function);
+		sunxi_gpio_set_cfgpin(SUNXI_GPC(7), pin_function);
+	};
+
 }
 
 static bool is_sun6i_gen_spi(void)
@@ -132,6 +143,9 @@ static uintptr_t spi0_base_address(void)
 
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H6))
 		return 0x05010000;
+
+	if (IS_ENABLED(CONFIG_MACH_SUN8I_T113))
+		return 0x04025000;
 
 	if (!is_sun6i_gen_spi() ||
 	    IS_ENABLED(CONFIG_MACH_SUNIV))
@@ -150,12 +164,14 @@ static void spi0_enable_clock(void)
 	/* Deassert SPI0 reset on SUN6I */
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H6))
 		setbits_le32(CCM_H6_SPI_BGR_REG, (1U << 16) | 0x1);
+	else if (IS_ENABLED(CONFIG_MACH_SUN8I_T113))
+		setbits_le32(CCM_T113_SPI_BGR_REG, (1U << 16) | 0x1);
 	else if (is_sun6i_gen_spi())
 		setbits_le32(SUN6I_BUS_SOFT_RST_REG0,
 			     (1 << AHB_RESET_SPI0_SHIFT));
 
 	/* Open the SPI0 gate */
-	if (!IS_ENABLED(CONFIG_MACH_SUN50I_H6))
+	if (!IS_ENABLED(CONFIG_MACH_SUN50I_H6) || !IS_ENABLED(CONFIG_MACH_SUN8I_T113))
 		setbits_le32(CCM_AHB_GATING0, (1 << AHB_GATE_OFFSET_SPI0));
 
 	if (IS_ENABLED(CONFIG_MACH_SUNIV)) {
@@ -163,13 +179,13 @@ static void spi0_enable_clock(void)
 		writel(SPI0_CLK_DIV_BY_32, base + SUN6I_SPI0_CCTL);
 	} else {
 		/* Divide by 4 */
-		writel(SPI0_CLK_DIV_BY_4, base + (is_sun6i_gen_spi() ?
+		writel(SPI0_CLK_DIV_BY_4, base + (is_sun6i_gen_spi() || IS_ENABLED(CONFIG_MACH_SUN8I_T113) ?
 					  SUN6I_SPI0_CCTL : SUN4I_SPI0_CCTL));
 		/* 24MHz from OSC24M */
 		writel((1 << 31), CCM_SPI0_CLK);
 	}
 
-	if (is_sun6i_gen_spi()) {
+	if (is_sun6i_gen_spi() || IS_ENABLED(CONFIG_MACH_SUN8I_T113)) {
 		/* Enable SPI in the master mode and do a soft reset */
 		setbits_le32(base + SUN6I_SPI0_GCR, SUN6I_CTL_MASTER |
 			     SUN6I_CTL_ENABLE | SUN6I_CTL_SRST);
@@ -190,7 +206,7 @@ static void spi0_disable_clock(void)
 	uintptr_t base = spi0_base_address();
 
 	/* Disable the SPI0 controller */
-	if (is_sun6i_gen_spi())
+	if (is_sun6i_gen_spi() || IS_ENABLED(CONFIG_MACH_SUN8I_T113))
 		clrbits_le32(base + SUN6I_SPI0_GCR, SUN6I_CTL_MASTER |
 					     SUN6I_CTL_ENABLE);
 	else
@@ -208,6 +224,8 @@ static void spi0_disable_clock(void)
 	/* Assert SPI0 reset on SUN6I */
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H6))
 		clrbits_le32(CCM_H6_SPI_BGR_REG, (1U << 16) | 0x1);
+	else if (IS_ENABLED(CONFIG_MACH_SUN8I_T113))
+		clrbits_le32(CCM_T113_SPI_BGR_REG, (1U << 16) | 0x1);
 	else if (is_sun6i_gen_spi())
 		clrbits_le32(SUN6I_BUS_SOFT_RST_REG0,
 			     (1 << AHB_RESET_SPI0_SHIFT));
@@ -220,7 +238,8 @@ static void spi0_init(void)
 	if (IS_ENABLED(CONFIG_MACH_SUN50I) ||
 	    IS_ENABLED(CONFIG_MACH_SUN50I_H6))
 		pin_function = SUN50I_GPC_SPI0;
-	else if (IS_ENABLED(CONFIG_MACH_SUNIV))
+	else if (IS_ENABLED(CONFIG_MACH_SUNIV) ||
+			IS_ENABLED(CONFIG_MACH_SUN8I_T113))
 		pin_function = SUNIV_GPC_SPI0;
 
 	spi0_pinmux_setup(pin_function);
@@ -293,7 +312,7 @@ static void spi0_read_data(void *buf, u32 addr, u32 len)
 		if (chunk_len > SPI_READ_MAX_SIZE)
 			chunk_len = SPI_READ_MAX_SIZE;
 
-		if (is_sun6i_gen_spi()) {
+		if (is_sun6i_gen_spi() || IS_ENABLED(CONFIG_MACH_SUN8I_T113)) {
 			sunxi_spi0_read_data(buf8, addr, chunk_len,
 					     base + SUN6I_SPI0_TCR,
 					     SUN6I_TCR_XCH,

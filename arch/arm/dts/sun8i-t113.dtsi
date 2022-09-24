@@ -238,6 +238,15 @@
 				pins = "PE2", "PE3";
 				function = "uart0";
 			};
+			uart1_pg_pins: uart1_pg_pins {
+				pins = "PG6", "PG7";
+				function = "uart1";
+			};
+			uart3_pb_pins: uart3_pb_pins {
+				pins = "PB6", "PB7";
+				function = "uart3";
+			};
+
 			mmc0_pins: mmc0-pins {
 				pins = "PF0", "PF1", "PF2", "PF3", "PF4", "PF5";
 				function = "mmc0";
@@ -251,8 +260,11 @@
 				       "PG5", "PG12", "PG13", "PG14", "PG15";
 				function = "emac";
 			};
-
-
+			rmii_pe_pins: rmii_pe_pins {
+				pins = "PE0", "PE1", "PE2", "PE3", "PE4", "PE5",
+						"PE6", "PE7", "PE8", "PE9", "PE10";
+				function = "emac";
+			};
 		};
 
 		mmc0: mmc@4020000 {
@@ -289,6 +301,8 @@
 		uart1: uart@2500400 {
 			compatible = "snps,dw-apb-uart";
 			reg = <0x02500400 0x400>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
 			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
 			fifo-size = <256>;
 			clocks = <&ccu CLK_BUS_UART1>;
@@ -300,11 +314,25 @@
 		uart2: uart@2500800 {
 			compatible = "snps,dw-apb-uart";
 			reg = <0x02500800 0x400>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
 			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
 			fifo-size = <256>;
 			clocks = <&ccu CLK_BUS_UART2>;
 			clock-names = "uart2";
 			resets = <&ccu RST_BUS_UART2>;
+			status = "disabled";
+		};
+		uart3: uart@2500C00 {
+			compatible = "snps,dw-apb-uart";
+			reg = <0x02500C00 0x400>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+			fifo-size = <256>;
+			clocks = <&ccu CLK_BUS_UART3>;
+			clock-names = "uart2";
+			resets = <&ccu RST_BUS_UART3>;
 			status = "disabled";
 		};
 
@@ -344,7 +372,7 @@
 
 		usb_otg: usb@4100000 {
 			compatible = "allwinner,sun20i-d1-musb",
-				     "allwinner,sun8i-a33-musb";
+				     "allwinner,sun8i-h3-musb";
 			reg = <0x4100000 0x400>;
 			clocks = <&ccu CLK_BUS_OTG>;
 			resets = <&ccu RST_BUS_OTG>;

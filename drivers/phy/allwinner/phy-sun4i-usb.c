@@ -601,11 +601,9 @@ static const struct sun4i_usb_phy_cfg sun8i_r40_cfg = {
 
 static const struct sun4i_usb_phy_cfg sun8i_t113_cfg = {
 	.num_phys = 2,
-	.type = sun8i_t113_phy,
-	.disc_thresh = 3,
+	.type = sun50i_h6_phy,
 	.phyctl_offset = REG_PHYCTL_A33,
 	.dedicated_clocks = true,
-	.enable_pmu_unk1 = true,
 	.phy0_dual_route = true,
 };
 

@@ -104,7 +104,7 @@ struct sunxi_gpio_reg {
 	&((struct sunxi_gpio_reg *)SUNXI_PIO_BASE)->gpio_bank[bank] : \
 	&((struct sunxi_gpio_reg *)SUNXI_R_PIO_BASE)->gpio_bank[(bank) - SUNXI_GPIO_L])
 
-#ifdef SUNXI_GPIO_V2
+#ifdef CONFIG_SUNXI_GPIO_V2
 #define GPIO_BANK(pin)          ((pin) >> 5)
 #define GPIO_NUM(pin)           ((pin) & 0x1f)
 
@@ -171,7 +171,11 @@ enum sunxi_gpio_number {
 /* GPIO pin function config */
 #define SUNXI_GPIO_INPUT	0
 #define SUNXI_GPIO_OUTPUT	1
+#ifdef CONFIG_SUNXI_GPIO_V2
+#define SUNXI_GPIO_DISABLE	15
+#else
 #define SUNXI_GPIO_DISABLE	7
+#endif
 
 #define SUNXI_GPA_EMAC		2
 #define SUN6I_GPA_GMAC		2
@@ -190,8 +194,8 @@ enum sunxi_gpio_number {
 #define SUN8I_GPB_UART2		2
 #define SUN8I_A33_GPB_UART0	3
 #define SUN8I_A83T_GPB_UART0	2
-#define SUN8I_T113_GPE_UART0	6
 #define SUN8I_V3S_GPB_UART0	3
+#define SUN8I_T113_GPB_UART3	7
 #define SUN50I_GPB_UART0	4
 
 #define SUNXI_GPC_NAND		2

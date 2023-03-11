@@ -1,0 +1,15 @@
+if TARGET_MX6ULL_HSC_TEHNOVA
+
+config SYS_BOARD
+	default "hsc-imx6ull"
+
+config SYS_VENDOR
+	default "tehnova"
+
+config SYS_CONFIG_NAME
+	default "hsc-imx6ull"
+
+config IMX_CONFIG
+	default "board/tehnova/hsc-imx6ull/imximage.cfg"
+
+endif

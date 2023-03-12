@@ -1,0 +1,34 @@
+/ {
+    aliases {
+		u-boot,dm-pre-reloc;
+		mmc0 = &usdhc1;
+		usb0 = &usbotg1; /* required for ums */
+		spi0 = &qspi;
+	};
+	smbios {
+		compatible = "u-boot,sysinfo-smbios";
+
+		smbios {
+			system {
+				manufacturer = "TehNova";
+			};
+
+			baseboard {
+				manufacturer = "TehNova";
+			};
+
+			chassis {
+				manufacturer = "TehNova";
+			};
+		};
+	};
+};
+&fec1 {
+	u-boot,dm-pre-reloc;
+};
+&qspi {
+	u-boot,dm-pre-reloc;
+};
+&flash0 {
+    u-boot,dm-pre-reloc;
+};

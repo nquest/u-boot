@@ -129,6 +129,10 @@ int board_late_init(void)
 	env_set("board_name", "tehnova-hsc-imx6ull");
 	env_set("board_rev", "1.0");
 #endif
+	if (is_boot_from_usb()) {
+				env_set("bootcmd", "fastboot usb 0");
+				env_set("bootdelay", "0");
+		}
 
 	return 0;
 }

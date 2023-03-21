@@ -87,7 +87,7 @@
 	flash0: mx25l12845g@0 {
 		#address-cells = <1>;
 		#size-cells = <1>;
-		compatible = "micron,n25q256a", "jedec,spi-nor";
+		compatible = "jedec,spi-nor";
 		spi-max-frequency = <29000000>;
 		reg = <0>;
 	};

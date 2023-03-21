@@ -472,6 +472,11 @@ config TARGET_MX6ULL_HSC_TEHNOVA
 	select BOARD_LATE_INIT
 	select DM
 	select DM_THERMAL
+	select DM_MMC
+	select DM_GPIO
+	select DM_SERIAL
+	select DM_THERMAL
+	select SUPPORT_SPL
 	imply CMD_DM
 
 config TARGET_MX6ULZ_SMM_M2

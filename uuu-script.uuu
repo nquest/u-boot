@@ -4,7 +4,7 @@ SDP: boot -f u-boot-dtb.imx
 FB: ucmd sf probe
 FB[-t 60000]: ucmd sf erase 0 0x1000
 FB: ucmd setenv fastboot_buffer ${loadaddr}
-FB: download -f qspi-config.bin
+FB: download -f qspi-header.bin
 FB: ucmd sf write ${loadaddr} 0x400 0x200
 FB: download -f u-boot-dtb.imx
 FB[-t 30000]: ucmd sf erase 0x1000 +${filesize}

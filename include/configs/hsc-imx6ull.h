@@ -22,18 +22,23 @@
 	"fdt_addr=0x83000000\0" \
 	"boot_fdt=try\0" \
 	"ip_dyn=yes\0" \
+	"partitions=" \
+		"name=rootfs,start=384K,size=1G;" \
+		"name=app,size=1G;" \
+		"name=userdata,size=0; \0" \
 	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
 	"mmcpart=1\0" \
-	"mmcroot=/dev/mmcblk1p1 rootwait rw\0" \
-	"mmcautodetect=yes\0" \
+	"mmcroot=/dev/mmcblk1p1 \0" \
+	"mmcapp=/dev/mmcblk1p2 \0" \
+	"mmcuser=/dev/mcblk1p3 \0" \
 	"mmcargs=setenv bootargs console=${console},${baudrate} " \
-		"root=${mmcroot}\0" \
+		"root=${mmcroot} rootrw=${mmcuser} init=/init \0" \
 	"loadbootscript=" \
 		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
-	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
-	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
+	"loadimage=ext2load mmc ${mmcdev}:${mmcpart} ${loadaddr} boot/${image}\0" \
+	"loadfdt=ext2load mmc ${mmcdev}:${mmcpart} ${fdt_addr} boot/${fdt_file}\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		"run mmcargs; " \
 		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \

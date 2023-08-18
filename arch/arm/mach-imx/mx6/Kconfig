@@ -440,6 +440,19 @@ config TARGET_MX6ULL_14X14_EVK
 	select DM_THERMAL
 	imply CMD_DM
 
+config TARGET_MX6ULL_WR_NETSOM
+	bool "Support imx6ull WirelessRoad NetSOM"
+	depends on MX6ULL
+	select BOARD_LATE_INIT
+	select DM
+	select DM_ETH
+	select DM_MMC
+	select DM_SPI
+	select DM_SPI_FLASH
+	select DM_GPIO
+	select DM_SERIAL
+	select DM_THERMAL
+
 config TARGET_MYS_6ULX
 	bool "MYiR MYS-6ULX"
 	depends on MX6ULL
@@ -674,6 +687,7 @@ source "board/freescale/mx6sxsabresd/Kconfig"
 source "board/freescale/mx6sxsabreauto/Kconfig"
 source "board/freescale/mx6ul_14x14_evk/Kconfig"
 source "board/freescale/mx6ullevk/Kconfig"
+source "board/wirelessroad/mx6ull_wr_netsom/Kconfig"
 source "board/grinn/liteboard/Kconfig"
 source "board/phytec/pcm058/Kconfig"
 source "board/phytec/pcl063/Kconfig"

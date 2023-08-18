@@ -1,0 +1,15 @@
+if TARGET_MX6ULL_WR_NETSOM
+
+config SYS_BOARD
+	default "mx6ull_wr_netsom"
+
+config SYS_VENDOR
+	default "wirelessroad"
+
+config SYS_CONFIG_NAME
+	default "mx6ull_wr_netsom"
+
+config IMX_CONFIG
+	default "board/wireslessroad/mx6ull_wr_netsom/imximage.cfg"
+
+endif

@@ -1,0 +1,7 @@
+MX6ULLWRNETSOM BOARD
+M:	Sergey Moryakov <sergey@nqnet.org>
+S:	Maintained
+F:	arch/arm/dts/imx6ull-wr-netsom.dts
+F:	board/wirelessroad/mx6ull_wr_netsom/
+F:	include/configs/mx6ull_wr_netsom.h
+F:	configs/mx6ull_wr_netsom_defconfig

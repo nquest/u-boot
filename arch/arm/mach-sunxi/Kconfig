@@ -1124,3 +1124,9 @@ config CHIP_DIP_SCAN
 	select W1_EEPROM
 	select W1_EEPROM_DS24XXX
 	select CMD_EXTENSION
+
+config EMAC_PORT_G
+    bool "EMAC on PG0-PG15"
+    help
+      Select this if phy connected to port G instead port E
+endif

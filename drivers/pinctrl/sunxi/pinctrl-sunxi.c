@@ -599,7 +599,11 @@ static const struct sunxi_pinctrl_desc __maybe_unused sun9i_a80_r_pinctrl_desc =
 };
 
 static const struct sunxi_pinctrl_function sun20i_d1_pinctrl_functions[] = {
-	{ "emac",	8 },	/* PE0-PE15 */
+#if IS_ENABLED(CONFIG_EMAC_PORT_G)
+	{ "emac",   4 },	/* PG0-PG15 */
+#else
+	{ "emac",   8 },	/* PE0-PE15 */
+#endif
 	{ "gpio_in",	0 },
 	{ "gpio_out",	1 },
 	{ "i2c0",	4 },	/* PB10-PB11 */

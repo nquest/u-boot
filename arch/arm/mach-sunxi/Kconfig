@@ -1125,6 +1125,14 @@ config CHIP_DIP_SCAN
 	select W1_EEPROM_DS24XXX
 	select CMD_EXTENSION
 
+if MACH_SUN8I_R528
+config SUN8I_PHY_CLK
+	bool "Enable Supply of EPHY clock on R528/T113/D1"
+	depends on MACH_SUN8I_R528
+	help
+	  Enable 25Mhz clock output for ethernet PHY
+
+
 config EMAC_PORT_G
     bool "EMAC on PG0-PG15"
     help

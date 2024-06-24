@@ -8,6 +8,7 @@
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
 obj-y	+= board.o
 obj-$(CONFIG_SUN7I_GMAC)	+= gmac.o
+obj-$(CONFIG_SUN8I_PHY_CLK) += phy_clk.o
 obj-$(CONFIG_MACH_SUN4I)	+= dram_sun4i_auto.o
 obj-$(CONFIG_MACH_SUN5I)	+= dram_sun5i_auto.o
 obj-$(CONFIG_MACH_SUN7I)	+= dram_sun5i_auto.o

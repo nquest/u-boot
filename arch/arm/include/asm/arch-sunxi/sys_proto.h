@@ -23,7 +23,7 @@ void sdelay(unsigned long);
 void return_to_fel(uint32_t lr, uint32_t sp);
 
 /* Board / SoC level designware gmac init */
-#if !defined CONFIG_SPL_BUILD && defined CONFIG_SUN7I_GMAC
+#if !defined CONFIG_SPL_BUILD && defined CONFIG_SUN7I_GMAC || CONFIG_SUN8I_PHY_CLK
 void eth_init_board(void);
 #else
 static inline void eth_init_board(void) {}

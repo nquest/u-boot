@@ -157,7 +157,8 @@ struct sunxi_ccm_reg {
 	u32 spi1_clk_cfg;	/* 0x944 SPI1 clock control */
 	u8 reserved_0x948[36];
 	u32 spi_gate_reset;	/* 0x96c SPI gate/reset control */
-	u8 reserved_0x970[12];
+	u32 emac_25m_clk_cfg; /* 0x970 EMAC 25M Clock control */
+	u8 reserved_0x978[8];
 	u32 emac_gate_reset;	/* 0x97c EMAC gate/reset control */
 	u8 reserved_0x980[48];
 	u32 ts_clk_cfg;		/* 0x9b0 TS clock control */
@@ -340,6 +341,10 @@ struct sunxi_ccm_reg {
 /* H6 doesn't have these delays */
 #define CCM_MMC_CTRL_OCLK_DLY(a)	((void) (a), 0)
 #define CCM_MMC_CTRL_SCLK_DLY(a)	((void) (a), 0)
+
+/* EMAC 25 Mhz Clock control (R528) */
+#define CCM_EMAC_25M_ENABLE            BIT(31)
+#define CCM_EMAC_25M_SRC_ENABLE        BIT(30)
 
 #ifndef __ASSEMBLY__
 void clock_set_pll1(unsigned int hz);

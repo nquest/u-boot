@@ -18,6 +18,10 @@
 #include <netdev.h>
 #include <usb.h>
 #include <usb/ehci-ci.h>
+#include <video.h>
+#include <lcd.h>
+#include <splash.h>
+#include <bmp_logo.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -60,6 +64,11 @@ int board_early_init_f(void)
 	return 0;
 }
 
+int display_logo(void) {
+    bmp_display((ulong)&bmp_logo_bitmap[0], 0, 0);
+    return 0;
+};
+
 #ifdef CONFIG_FEC_MXC
 static int setup_fec(void)
 {
@@ -72,14 +81,14 @@ static int setup_fec(void)
 	*/
 	clrsetbits_le32(&iomuxc_regs->gpr[1], IOMUX_GPR1_FEC1_MASK,
 			IOMUX_GPR1_FEC1_CLOCK_MUX1_SEL_MASK);
-	
+
 	/*
 	* Use 50MHz anatop loopbak REF_CLK2 for ENET2,
 	* clear gpr1[14], set gpr1[18].
 	*/
 	clrsetbits_le32(&iomuxc_regs->gpr[1], IOMUX_GPR1_FEC2_MASK,
 			IOMUX_GPR1_FEC2_CLOCK_MUX1_SEL_MASK);
-	
+
 	ret = enable_fec_anatop_clock(0, ENET_50MHZ);
 	if (ret)
 		return ret;
@@ -142,9 +151,11 @@ int board_init(void)
 	/* Address of boot parameters */
 	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
 
-
+#ifdef CONFIG_DM_VIDEO
+    display_logo();
+#endif
 #ifdef	CONFIG_FEC_MXC
-	
+
 	setup_fec();
 #endif
 

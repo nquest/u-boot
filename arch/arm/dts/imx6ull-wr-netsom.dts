@@ -73,6 +73,30 @@
 	};
 };
 
+&ecspi4 {
+        u-boot,dm-pre-reloc;
+        fsl,spi-num-chipselects = <1>;
+        cs-gpios = <&gpio4 9 0>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_ecspi4_0>;
+        status = "okay";
+        dma-names = "rx", "tx";
+        dmas = <&sdma 9 7 1>, <&sdma 10 7 2>;
+
+        lcd@0 {
+                u-boot,dm-pre-reloc;
+                compatible = "sitronix,st7735r";
+                reg = <0>;
+                status = "okay";
+                spi-max-frequency = <32000000>;
+                rotate = <270>;
+                fps = <30>;
+                buswidth = <8>;
+                dc-gpios = <&gpio3 1 GPIO_ACTIVE_HIGH>;
+                debug = <0>;
+        };
+};
+
 &fec1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_enet1>;
@@ -117,17 +141,27 @@
 &iomuxc {
 	pinctrl_ecspi3_0: ecspi3grp-0 {
 		fsl,pins = <
-			MX6UL_PAD_UART2_CTS_B__ECSPI3_MOSI	0x110b1
-			MX6UL_PAD_UART2_RTS_B__ECSPI3_MISO	0x110b1
-			MX6UL_PAD_UART2_RX_DATA__ECSPI3_SCLK	0x110b1
-			MX6UL_PAD_UART2_TX_DATA__GPIO1_IO20	0x10b0
+			MX6UL_PAD_UART2_CTS_B__ECSPI3_MOSI   0x110b1
+			MX6UL_PAD_UART2_RTS_B__ECSPI3_MISO   0x110b1
+			MX6UL_PAD_UART2_RX_DATA__ECSPI3_SCLK 0x110b1
+			MX6UL_PAD_UART2_TX_DATA__GPIO1_IO20  0x10b0
 		>;
 	};
+
+	pinctrl_ecspi4_0: ecspi2grp-0 {
+        fsl,pins = <
+            MX6UL_PAD_NAND_DATA05__ECSPI4_MOSI  0x110b1
+            MX6UL_PAD_NAND_DATA06__ECSPI4_MISO  0x110b1
+            MX6UL_PAD_NAND_DATA04__ECSPI4_SCLK  0x110b1
+            MX6UL_PAD_NAND_DATA07__GPIO4_IO09   0x10b0
+            MX6UL_PAD_LCD_ENABLE__GPIO3_IO01    0x110b1
+        >;
+    };
 
     pinctrl_enet1: enet1grp {
         fsl,pins = <
 			MX6UL_PAD_GPIO1_IO07__ENET1_MDC         0x1b0b0
-			MX6UL_PAD_GPIO1_IO06__ENET1_MDIO        0x1b0b0			
+			MX6UL_PAD_GPIO1_IO06__ENET1_MDIO        0x1b0b0
 			MX6UL_PAD_ENET1_RX_EN__ENET1_RX_EN		0x1b0b0
             MX6UL_PAD_ENET1_RX_ER__ENET1_RX_ER		0x1b0b0
             MX6UL_PAD_ENET1_RX_DATA0__ENET1_RDATA00	0x1b0b0
@@ -136,7 +170,7 @@
             MX6UL_PAD_ENET1_TX_DATA0__ENET1_TDATA00	0x1b0b0
             MX6UL_PAD_ENET1_TX_DATA1__ENET1_TDATA01	0x1b0b0
             MX6UL_PAD_ENET1_TX_CLK__ENET1_REF_CLK1	0x4001b031
-			
+
 			/* pinmux setup for second phy clock */
 			MX6UL_PAD_ENET2_TX_CLK__ENET2_REF_CLK2  0x4001b031
         >;
@@ -151,7 +185,7 @@
 	// 		MX6UL_PAD_ENET2_TX_EN__ENET2_TX_EN      0x1b0b0
 	// 		MX6UL_PAD_ENET2_TX_DATA0__ENET2_TDATA00 0x1b0b0
 	// 		MX6UL_PAD_ENET2_TX_DATA1__ENET2_TDATA01 0x1b0b0
-			
+
 	// 	>;
 	// };
 

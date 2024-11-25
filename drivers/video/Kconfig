@@ -669,6 +669,13 @@ config VIDEO_SEPS525
 	  Enable support for the Syncoam PM-OLED display driver (RGB 160x128).
 	  Currently driver is supporting only SPI interface.
 
+config VIDEO_ST7735
+    bool "Enable video support for ST7735"
+    depends on DM_VIDEO
+    help
+      Enable support for LCDs based on Sitronix ST7735R controller.
+      Only SPI interface support.
+
 source "drivers/video/nexell/Kconfig"
 
 config VIDEO

@@ -44,7 +44,9 @@
 // #endif
 
 
-
+#if defined(CONFIG_DM_VIDEO)
+#define CONFIG_VIDEO_LOGO
+#endif
 
 #if !defined(CONFIG_CMD_SF)
 #define CONFIG_ENV_IS_IN_MMC
